@@ -8,7 +8,11 @@ import {
   abbreviateLanguage,
   translate,
   HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_UNAUTHORIZED,
 } from '@deeplx/core'
+
+// 在这里设置您的自定义 token
+const API_TOKEN = 'leckOshBipt6'
 
 export interface RequestParams {
   text: string
@@ -16,10 +20,25 @@ export interface RequestParams {
   target_lang: TargetLanguage
 }
 
+// 验证 token 的函数
+function validateToken(req: VercelRequest): boolean {
+  const token = req.headers.authorization?.split(' ')[1] || req.query.token
+  return token === API_TOKEN
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
+  // 验证 token
+  if (!validateToken(req)) {
+    res.status(401).json({
+      code: 401,
+      message: 'Invalid access token',
+    })
+    return
+  }
+
   // type-coverage:ignore-next-line
   const body = req.body as RequestParams | undefined
 
