@@ -8,7 +8,6 @@ import {
   abbreviateLanguage,
   translate,
   HTTP_STATUS_BAD_REQUEST,
-  HTTP_STATUS_UNAUTHORIZED,
 } from '@deeplx/core'
 
 // 在这里设置您的自定义 token
